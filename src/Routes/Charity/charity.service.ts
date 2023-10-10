@@ -2,14 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { CharityModel, UpdateCharityModel } from 'src/Models/Charity.model';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { IsExistsRegistartionException } from 'src/Exceptions/isexistsregistartion.exception';
+import { IsNotExistsException } from 'src/Exceptions/isnotexists.exception';
 
 const prisma: PrismaClient = new PrismaClient();
 
 @Injectable()
 export class CharityService {
 
-    async create(cm: CharityModel){
+    async create(cm: CharityModel) {
         try {
+
+            const isExists =
+                await prisma.food_offerer.findFirst({ where: { email: cm.email } }) ||
+                await prisma.foodsaver.findFirst({ where: { email: cm.email } }) ||
+                await prisma.charity.findFirst({ where: { email: cm.email } });
+
+            if (isExists) {
+                throw new IsExistsRegistartionException();
+            }
+
             const saltOrRounds = 10;
             const hashedPassword = await bcrypt.hash(cm.password, saltOrRounds);
 
@@ -27,14 +39,17 @@ export class CharityService {
                     longitude: cm.longitude
                 }
             })
-            const {password, ...rest} = c
+            const { password, ...rest } = c
             return rest
         } catch (error) {
-            return error
+            if (error instanceof IsExistsRegistartionException) {
+                throw new IsExistsRegistartionException();
+            }
+            throw new Error("Adatbázis hiba!");
         }
     }
 
-    async get(){
+    async get() {
         try {
             const cs: Array<any> = await prisma.charity.findMany({
                 select: {
@@ -48,18 +63,18 @@ export class CharityService {
                     latitude: true,
                     longitude: true,
                     role: true,
-                    members: true                    
+                    members: true
 
                 }
             })
-            
+
             return cs
         } catch (error) {
-            
+            throw new Error("Adatbázis hiba!");
         }
     }
 
-    async getOne(id: number){
+    async getOne(id: number) {
         try {
             const c: CharityModel = await prisma.charity.findFirst({
                 where: {
@@ -70,14 +85,20 @@ export class CharityService {
                     members: true
                 }
             })
-            const {password, ...rest} = c
+            if (!c) {
+                throw new IsNotExistsException();
+            }
+            const { password, ...rest } = c
             return rest
         } catch (error) {
-            
+            if (error instanceof IsNotExistsException) {
+                throw new IsNotExistsException();
+            }
+            throw new Error("Adatbázis hiba!");
         }
     }
 
-    async update(cm: UpdateCharityModel, id: number){
+    async update(cm: UpdateCharityModel, id: number) {
         try {
             const c: UpdateCharityModel = await prisma.charity.update({
                 where: {
@@ -95,7 +116,10 @@ export class CharityService {
             })
             return c
         } catch (error) {
-            
+            if (error.code == "P2025") {
+                throw new IsNotExistsException();
+            }
+            throw new Error("Adatbázis hiba!");
         }
     }
 }
