@@ -6,12 +6,15 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './PrismaConfig/PrismaService';
+import { AuthModule } from './Routes/Auth/auth.module';
 
 @Module({
       imports: [
             AllergenModule,
             CharityModule,
-            FoodOffererModule, FoodsaverModule],
+            FoodOffererModule,
+            FoodsaverModule,
+            AuthModule],
       controllers: [
             AppController],
       providers: [
