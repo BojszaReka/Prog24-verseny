@@ -1,3 +1,5 @@
+import { AllergenModule } from './Routes/Allergen/allergen.module';
+import { AllergenController } from './Routes/Allergen/allergen.controller';
 import { CharityModule } from './Routes/Charity/charity.module';
 import { CharityService } from './Routes/Charity/charity.service';
 import { CharityController } from './Routes/Charity/charity.controller';
@@ -10,9 +12,10 @@ import { PrismaService } from './PrismaConfig/PrismaService';
 
 @Module({
   imports: [
+        AllergenModule, 
         CharityModule, 
     FoodOffererModule,],
-  controllers: [
+  controllers: [ 
         AppController],
   providers: [
         AppService, PrismaService],
