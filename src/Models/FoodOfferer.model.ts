@@ -22,3 +22,21 @@ export class FoodOffererModel {
     longitude: number
 
 }
+
+export class UpdateFoodOffererModel {
+    @IsNotEmpty()
+    name: string
+    @IsNotEmpty()
+    phone: string
+    @IsNotEmpty()
+    @IsNumber()
+    zipcode: number
+    @IsNotEmpty()
+    locality: string
+    @IsNotEmpty()
+    address: string
+    @IsNotEmpty()
+    latitude: number
+    @IsNotEmpty()
+    longitude: number
+}
