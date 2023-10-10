@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
 import { Food, PrismaClient } from '@prisma/client';
 import moment from 'moment';
 import { FoodModel } from 'src/Models/Food.model';
@@ -7,6 +7,7 @@ const prisma: PrismaClient = new PrismaClient();
 
 @Injectable()
 export class FoodService {
+
     async create(fm: FoodModel){
         try {
             const food = await prisma.food.create({
@@ -17,13 +18,21 @@ export class FoodService {
                     istakeway: Boolean(fm.istakeway),
                     isavailable: Boolean(fm.isavailable),
                     kitchenId: fm.kitchenId,
-                    allergens: fm.allergens,
+                    allergens: {
+                        createMany: {
+                            data: fm.allergens
+                        }
+                    },
                     food_offererId: fm.food_offererId
+                },
+                include: {
+                    allergens: true
                 }
             })
             
             return food;
         } catch (error) {
+            console.log(error)
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
     }
@@ -36,7 +45,18 @@ export class FoodService {
                     kitchen_type: true
                 }
             })
-
+            let isValid = true;
+            for (let indexI = 0; indexI < foods.length; indexI++) {
+                for (let indexJ = 0; indexJ < foods[indexI].allergens.length; indexJ++) {
+                    const element = foods[indexI].allergens[indexJ].name;
+                    const allergene = req.query.allergene+'';
+                    console.log(element+"  "+allergene)
+                    if (allergene.includes(''+element)){
+                        isValid = false;
+                    }
+                }
+                
+            }
             let array: Array<any> = [];
         for (let index = 0; index < foods.length; index++) {
             const element = foods[index];
@@ -48,19 +68,32 @@ export class FoodService {
                     latitude: true,
                     longitude: true
                 }
-            }) 
+            })  
             let indexOfFood = foods[index].id
             let alma = Promise.resolve(this.distanceCalculation(foodofferers.latitude, foodofferers.longitude, req.user.latitude, req.user.longitude))
-            alma.then(value => {
-                array.push({"id": indexOfFood, "distance": value})
+            alma.then(value => {                  
+                    if(value < req.query.distance &&
+                         ''+foods[index].istakeway === ''+req.query.istakeaway &&
+                          ''+foods[index].kitchen_type.name === ''+req.query.kitchentype &&
+                          isValid){ 
+                    array.push({"id": indexOfFood, "distance": value})
+                }
             })
         }
+
         return {array}
             
         } catch (error) {
+            console.log(error)
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
         
+    }
+
+    async CompareAllerges(query: any, foods: Array<any>){
+        for (let index = 0; index < foods.length; index++) {
+            
+        }
     }
 
     async get(req: any){
