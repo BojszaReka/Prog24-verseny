@@ -15,6 +15,9 @@ import {
   InputLeftElement,
   InputLeftAddon,
   Divider,
+  NumberInput,
+  NumberInputField,
+  Skeleton,
 } from "@chakra-ui/react";
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { PhoneIcon } from "@chakra-ui/icons";
@@ -24,6 +27,33 @@ export default function BtnCharityReg() {
 
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
+
+  const [email, setEmail] = React.useState("");
+  const handleChangeEmail = (event) => setEmail(event.target.value);
+
+  const [password, setPassword] = React.useState("");
+  const handleChangePassword = (event) => setPassword(event.target.value);
+
+  const [phonenumber, setPhonenumber] = React.useState("");
+  const handleChangePhonenumber = (event) => setPhonenumber(event.target.value);
+
+  const [name, setName] = React.useState("");
+  const handleChangeName = (event) => setName(event.target.value);
+
+  const [zipcode, setZipcode] = React.useState("");
+  const handleChangeZipcode = (event) => setZipcode(event.target.value);
+
+  const [city, setCity] = React.useState("");
+  const handleChangeCity = (event) => setCity(event.target.value);
+
+  const [longitude, setLongitude] = React.useState("");
+  const handleChangeLongitude = (event) => setLongitude(event.target.value);
+
+  const [latitude, setLatitude] = React.useState("");
+  const handleChangeLatitude = (event) => setLatitude(event.target.value);
+
+  const [address, setAddress] = React.useState("");
+  const handleChangeAddress = (event) => setAddress(event.target.value);
 
   return (
     <>
@@ -52,13 +82,20 @@ export default function BtnCharityReg() {
           <ModalBody>
             <FormControl>
               <FormLabel color="gray">E-mail cím</FormLabel>
-              <Input variant="filled" placeholder="E-mail cím" />
+              <Input
+                value={email}
+                onChange={handleChangeEmail}
+                variant="filled"
+                placeholder="E-mail cím"
+              />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel color="gray">Jelszó</FormLabel>
               <InputGroup>
                 <Input
+                  value={password}
+                  onChange={handleChangePassword}
                   variant="filled"
                   type={show ? "text" : "password"}
                   placeholder="Jelszó"
@@ -75,7 +112,13 @@ export default function BtnCharityReg() {
               <FormLabel color="gray">Telefonszám</FormLabel>
               <InputGroup>
                 <InputLeftAddon children="+36" />
-                <Input type="tel" variant="filled" placeholder="Telefonszám" />
+                <Input
+                  value={phonenumber}
+                  onChange={handleChangePhonenumber}
+                  type="tel"
+                  variant="filled"
+                  placeholder="Telefonszám"
+                />
                 <InputRightElement pointerEvents="none">
                   <PhoneIcon color="grey" />
                 </InputRightElement>
@@ -84,10 +127,55 @@ export default function BtnCharityReg() {
             <br />
             <FormControl>
               <FormLabel color="gray">Név</FormLabel>
-              <Input variant="filled" placeholder="Charity neve" />
+              <Input
+                value={name}
+                onChange={handleChangeName}
+                variant="filled"
+                placeholder="Charity neve"
+              />
+            </FormControl>
+            <br />
+            <Divider />
+            <br />
+            <FormControl>
+              <FormLabel color="gray">Irányítószám</FormLabel>
+              <NumberInput variant="filled">
+                <NumberInputField
+                  value={zipcode}
+                  onChange={handleChangeZipcode}
+                  placeholder="0000"
+                />
+              </NumberInput>
             </FormControl>
 
-            <Divider />
+            <br />
+            <FormControl>
+              <FormLabel color="gray">Város</FormLabel>
+              <Input
+                value={city}
+                onChange={handleChangeCity}
+                variant="filled"
+                placeholder="Város neve"
+              />
+            </FormControl>
+            <br />
+            
+            <FormControl>
+              <FormLabel color="gray">Cím</FormLabel>
+              <Input
+                value={address}
+                onChange={handleChangeAddress}
+                variant="filled"
+                placeholder="Charity címe"
+              />
+            </FormControl>
+            <br />
+            <FormControl>
+              <FormLabel color="gray">
+                Szélesség / Hosszúság / Térkép:{" "}
+              </FormLabel>
+              <Skeleton height="40px" />
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>

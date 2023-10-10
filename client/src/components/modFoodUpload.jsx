@@ -19,23 +19,38 @@ import {
   Checkbox,
   Radio,
   RadioGroup,
-  Divider 
+  Divider,
 } from "@chakra-ui/react";
 
 export default function BtnFoodUpload() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [value, setValue] = React.useState("1");
 
+  value = { email };
+  onChange = { handleChangeEmail };
+
+  const [foodtype, setFoodtype] = React.useState("");
+  const handleChangeFoodtype = (event) => setFoodtype(event.target.value);
+
+  //kieg!
+  const [allergens, setAllergens] = React.useState("");
+  const handleChangeAllergens = (event) => setAllergens(event.target.value);
+
+  const [expiracy, setExpiracy] = React.useState("");
+  const handleChangeExpiracy = (event) => setExpiracy(event.target.value);
+
+  //kieg!
+  const [eatenat, setEatenat] = React.useState("");
+  const handleChangeEatenat = (event) => setEatenat(event.target.value);
+
+  const [kitchentype, setKitchentype] = React.useState("");
+  const handleChangeKitchentype = (event) => setKitchentype(event.target.value);
+
   return (
     <>
-        <Button
-          onClick={onOpen}
-          colorScheme="blue"
-          variant="outline"
-          width="50%"
-        >
-          Étel feltöltése
-        </Button>
+      <Button onClick={onOpen} colorScheme="blue" variant="outline" width="50%">
+        Étel feltöltése
+      </Button>
 
       <Modal
         isOpen={isOpen}
@@ -53,7 +68,12 @@ export default function BtnFoodUpload() {
               <Box>
                 <FormControl>
                   <FormLabel color="gray">Étel típusa</FormLabel>
-                  <Select id="foodType" placeholder="Étel típusa">
+                  <Select
+                    value={foodtype}
+                    onChange={handleChangeFoodtype}
+                    id="foodType"
+                    placeholder="Étel típusa"
+                  >
                     <option value="1">Melegítendő</option>
                     <option value="2">Hideg</option>
                     <option value="3">Rövid lejáratú tejtermék</option>
@@ -61,7 +81,7 @@ export default function BtnFoodUpload() {
                   </Select>
                 </FormControl>
               </Box>
-                <Divider />
+              <Divider />
               <Box>
                 <FormControl>
                   <FormLabel color="gray">Allergének</FormLabel>
@@ -71,11 +91,13 @@ export default function BtnFoodUpload() {
                   </Stack>
                 </FormControl>
               </Box>
-                <Divider />
+              <Divider />
               <Box>
                 <FormControl>
-                  <FormLabel color="gray" >Lejárati idő</FormLabel>
+                  <FormLabel color="gray">Lejárati idő</FormLabel>
                   <Input
+                    value={expiracy}
+                    onChange={handleChangeExpiracy}
                     id="exprirationDate"
                     placeholder="Lejárati idő"
                     size="md"
@@ -99,7 +121,12 @@ export default function BtnFoodUpload() {
               <Box>
                 <FormControl>
                   <FormLabel color="gray">Konyha jellege</FormLabel>
-                  <Select id="kitchenType" placeholder="Konyha jellege">
+                  <Select
+                    value={kitchentype}
+                    onChange={handleChangeKitchentype}
+                    id="kitchenType"
+                    placeholder="Konyha jellege"
+                  >
                     <option value="option1">Magyar</option>
                     <option value="option2">Olasz</option>
                     <option value="option3">Ázsiai</option>
