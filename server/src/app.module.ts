@@ -1,3 +1,6 @@
+import { KitchenModule } from './Routes/Kitchen/kitchen.module';
+import { KitchenService } from './Routes/Kitchen/kitchen.service';
+import { KitchenController } from './Routes/Kitchen/kitchen.controller';
 import { FoodService } from './Routes/Food/food.service';
 import { FoodController } from './Routes/Food/food.controller';
 import { FoodModule } from './Routes/Food/food.module';
@@ -13,6 +16,7 @@ import { AuthModule } from './Routes/Auth/auth.module';
 
 @Module({
       imports: [
+        KitchenModule, 
         FoodModule, 
         FoodModule, 
             AllergenModule,
@@ -21,10 +25,10 @@ import { AuthModule } from './Routes/Auth/auth.module';
             FoodsaverModule,
             AuthModule,
             FoodModule],
-      controllers: [ 
+      controllers: [
             AppController],
       providers: [
-            AppService,
+           AppService,
              PrismaService],
 
 })
