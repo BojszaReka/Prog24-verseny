@@ -107,6 +107,8 @@ model Foodsaver {
   birthyear    Int
   kitchenId    Int
   roleId       Int
+  latitude     Float
+  longitude    Float
   allergens    Allergen[]
   kitchen_type Kitchen    @relation(fields: [kitchenId], references: [id])
   role         Role       @relation(fields: [roleId], references: [id])
