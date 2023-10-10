@@ -26,6 +26,9 @@ export default function BtnFoodUpload() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [value, setValue] = React.useState("1");
 
+  const [name, setName] = React.useState("");
+  const handleChangeName = (event) => setName(event.target.value);
+
   const [foodtype, setFoodtype] = React.useState("");
   const handleChangeFoodtype = (event) => setFoodtype(event.target.value);
 
@@ -64,6 +67,16 @@ export default function BtnFoodUpload() {
             <SimpleGrid columns={1} spacingX="40px" spacingY="20px">
               <Box>
                 <FormControl>
+                  <FormLabel color="gray">Név</FormLabel>
+                  <Input
+                    value={name}
+                    onChange={handleChangeName}
+                    variant="outline"
+                    placeholder="Az étel neve"
+                  />
+                </FormControl>
+<br />
+                <FormControl >
                   <FormLabel color="gray">Étel típusa</FormLabel>
                   <Select
                     value={foodtype}
