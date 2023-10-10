@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { IsNotExistsException } from 'src/Exceptions/isnotexists.exception';
 import { LoginModel, LoginResponseModel } from 'src/Models/Login.model';
@@ -45,7 +45,13 @@ export class AuthService {
             return res;
 
         } catch (error) {
-            
+            if (error instanceof IsNotExistsException) {
+                throw new IsNotExistsException();
+            }
+            if (error instanceof NoMatchesPasswordAndEmailException) {
+                throw new NoMatchesPasswordAndEmailException();
+            }
+            throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
     }
 }
