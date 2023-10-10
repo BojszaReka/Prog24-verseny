@@ -4,26 +4,26 @@ import { FoodOffererModel, UpdateFoodOffererModel } from 'src/Models/FoodOfferer
 
 @Controller("/foodofferer")
 export class FoodOffererController {
-    constructor(private readonly foodoffereService: FoodoffererService) { }
+    constructor(private readonly FoodoffereService: FoodoffererService) { }
 
     @Post('/create')
     async create(@Body() fo: FoodOffererModel) {
-        return await this.foodoffereService.create(fo);
+        return await this.FoodoffereService.create(fo);
     }
 
     @Get('/get')
     async get() {
-        return await this.foodoffereService.get();
+        return await this.FoodoffereService.get();
     }
 
     @Get('/get/:id')
     async getOne(@Param('id') id: string) {
-        return await this.foodoffereService.getOne(parseInt(id));
+        return await this.FoodoffereService.getOne(parseInt(id));
     }
 
     @Put('/update/:id')
     async update(@Param('id') id: string, @Body() fo: UpdateFoodOffererModel) {
-        return await this.foodoffereService.update(parseInt(id), fo);
+        return await this.FoodoffereService.update(parseInt(id), fo);
     }
 
 
