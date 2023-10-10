@@ -6,7 +6,7 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+//x
 model Food {
   id              Int           @id @default(autoincrement())
   name            String        @db.VarChar(100)
@@ -23,6 +23,8 @@ model Food {
   @@map("foods")
 }
 
+
+//x
 model Kitchen {
   id        Int         @id @default(autoincrement())
   name      String      @db.VarChar(50)
@@ -32,7 +34,7 @@ model Kitchen {
 
   @@map("kitchens")
 }
-
+//x
 model Allergen {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar(50)
@@ -45,7 +47,7 @@ model Allergen {
 
   @@map("allergens")
 }
-
+//x
 model Food_offerer {
   id        Int    @id @default(autoincrement())
   name      String @db.VarChar(100)
@@ -63,7 +65,7 @@ model Food_offerer {
 
   @@map("food_offerers")
 }
-
+//x
 model Charity {
   id        Int      @id @default(autoincrement())
   email     String   @db.VarChar(250)
@@ -96,7 +98,7 @@ model Member {
 
   @@map("members")
 }
-
+//x
 model Foodsaver {
   id           Int        @id @default(autoincrement())
   name         String     @db.VarChar(100)
@@ -115,7 +117,7 @@ model Foodsaver {
 
   @@map("foodsavers")
 }
-
+//x
 model Role {
   id           Int            @id @default(autoincrement())
   name         String         @db.VarChar(50)
