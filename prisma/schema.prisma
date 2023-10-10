@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Food {
+  id              Int           @id @default(autoincrement())
+  name            String        @db.VarChar(100)
+  type            String        @db.VarChar(100)
+  allergens       Allergen[]
+  expiration_date DateTime      @db.Date
+  istakeway       Boolean       @db.Bit(1) // 0 -> helyben, 1 -> elvitel
+  isavailable     Boolean       @db.Bit(1)
+  kitchen_type    Kitchen       @relation(fields: [kitchenId], references: [id])
+  kitchenId       Int
+  Food_offerer    Food_offerer? @relation(fields: [food_offererId], references: [id])
+  food_offererId  Int?
+
+  @@map("foods")
+}
+
+model Kitchen {
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(50)
+  Food      Food[]
+  Member    Member[]
+  Foodsaver Foodsaver[]
+
+  @@map("kitchens")
+}
+
+model Allergen {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  Food        Food?      @relation(fields: [foodId], references: [id])
+  foodId      Int?
+  Member      Member?    @relation(fields: [memberId], references: [id])
+  memberId    Int?
+  Foodsaver   Foodsaver? @relation(fields: [foodsaverId], references: [id])
+  foodsaverId Int?
+
+  @@map("allergens")
+}
+
+model Food_offerer {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(100)
+  email     String @db.VarChar(250)
+  password  String @db.VarChar(500)
+  role      Role   @relation(fields: [roleId], references: [id])
+  phone     String @db.VarChar(12)
+  zipcode   Int    @db.Int
+  locality  String @db.VarChar(100)
+  address   String @db.VarChar(100)
+  latitude  Float  @db.Double
+  longitude Float  @db.Double
+  food      Food[]
+  roleId    Int
+
+  @@map("food_offerers")
+}
+
+model Charity {
+  id       Int      @id @default(autoincrement())
+  email    String   @db.VarChar(250)
+  password String   @db.VarChar(500)
+  role     Role     @relation(fields: [roleId], references: [id])
+  phone    String   @db.VarChar(12)
+  name     String   @db.VarChar(100)
+  members  Member[]
+  roleId   Int
+
+  @@map("charities")
+}
+
+model Member {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(100)
+  phone        String     @db.VarChar(12)
+  locality     String     @db.VarChar(100)
+  birthyear    Int        @db.Int
+  allergens    Allergen[]
+  kitchen_type Kitchen    @relation(fields: [kitchenId], references: [id])
+  kitchenId    Int
+  Charity      Charity?   @relation(fields: [charityId], references: [id])
+  charityId    Int?
+
+  @@map("members")
+}
+
+model Foodsaver {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(100)
+  email        String     @db.VarChar(250)
+  password     String     @db.VarChar(500)
+  role         Role       @relation(fields: [roleId], references: [id])
+  phone        String     @db.VarChar(12)
+  locality     String     @db.VarChar(100)
+  birthyear    Int        @db.Int
+  allergens    Allergen[]
+  kitchen_type Kitchen    @relation(fields: [kitchenId], references: [id])
+  kitchenId    Int
+  roleId       Int
+
+  @@map("foodsavers")
+}
+
+model Role {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(50)
+  Charity      Charity[]
+  Food_offerer Food_offerer[]
+  Foodsaver    Foodsaver[]
+
+  @@map("roles")
+}
