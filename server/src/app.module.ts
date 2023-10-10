@@ -1,3 +1,6 @@
+import { FoodService } from './Routes/Food/food.service';
+import { FoodController } from './Routes/Food/food.controller';
+import { FoodModule } from './Routes/Food/food.module';
 import { AllergenModule } from './Routes/Allergen/allergen.module';
 import { FoodsaverModule } from './Routes/Foodsaver/foodsaver.module';
 import { CharityModule } from './Routes/Charity/charity.module';
@@ -10,15 +13,19 @@ import { AuthModule } from './Routes/Auth/auth.module';
 
 @Module({
       imports: [
+        FoodModule, 
+        FoodModule, 
             AllergenModule,
             CharityModule,
             FoodOffererModule,
             FoodsaverModule,
-            AuthModule],
-      controllers: [
+            AuthModule,
+            FoodModule],
+      controllers: [ 
             AppController],
       providers: [
-            AppService, PrismaService],
+            AppService,
+             PrismaService],
 
 })
 export class AppModule { }
