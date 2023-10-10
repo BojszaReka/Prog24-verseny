@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Box,
   Flex,
@@ -15,24 +15,13 @@ import {
   useColorModeValue,
   Stack,
   MenuGroup,
-  Text
-} from "@chakra-ui/react"
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons"
+  Text,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
-//ez változik attól függően, hogy milyen a felhasználó
-//foodOfferer:
-const Links = ["Étel feltöltése", "Feltöltött ételek"] 
-
-/*
-ételmentő, charity:
-const Links = ["Ételek keresése", "Szükségek specifikálása"] 
-*/
-
-
-const NavLink = props => {
-    
-  const { children } = props
-  
+const NavLink = (props) => {
+  const { children } = props;
 
   return (
     <Box
@@ -42,19 +31,50 @@ const NavLink = props => {
       rounded={"md"}
       _hover={{
         textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700")
+        bg: useColorModeValue("gray.200", "gray.700"),
       }}
       href={"#"}
     >
       {children}
     </Box>
-  )
-}
+  );
+};
 
 export default function Simple() {
-    const UserName = "Felhasználó neve";
-    const UserType = "Ételfelajánló"
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const UserName = "Felhasználó neve";
+  const UserType = "Ételfelajánló";
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  let navigate = useNavigate();
+  const routeChangeUpload = () => {
+    let path = "/loggedin/upload";
+    navigate(path);
+  };
+
+  const routeChangeUploaded = () => {
+    let path = "/loggedin/uploaded";
+    navigate(path);
+  };
+
+  const routeChangeSearch = () => {
+    let path = "/loggedin/search";
+    navigate(path);
+  };
+
+  const routeChangeSpec = () => {
+    let path = "/loggedin/spec";
+    navigate(path);
+  };
+
+  const routeChangeSettings = () => {
+    let path = "/loggedin/settings";
+    navigate(path);
+  };
+
+  const routeChangeSignout = () => {
+    let path = "/";
+    navigate(path);
+  };
 
   return (
     <>
@@ -69,16 +89,27 @@ export default function Simple() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Box>
-                <Text fontSize='2xl' as='b' font-family='Georgia'>Ételmentők</Text>
+              <Text fontSize="2xl" as="b" fontFamily="Georgia">
+                Ételmentők
+              </Text>
             </Box>
             <HStack
               as={"nav"}
-              spacing={4}
+              spacing={5}
               display={{ base: "none", md: "flex" }}
             >
-              {Links.map(link => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
+              <Button onClick={routeChangeUpload}>
+                <NavLink>Étel feltöltése</NavLink>
+              </Button>
+              <Button onClick={routeChangeUploaded}>
+                <NavLink>Feltöltött ételek</NavLink>
+              </Button>
+              <Button onClick={routeChangeSearch}>
+                <NavLink>Ételek keresése</NavLink>
+              </Button>
+              <Button onClick={routeChangeSpec}>
+                <NavLink>Szükségek specifikálása</NavLink>
+              </Button>
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
@@ -94,11 +125,12 @@ export default function Simple() {
               </MenuButton>
               <MenuList>
                 <MenuGroup title={UserName}>
-                    <MenuItem>Beállítások</MenuItem>
-                    <MenuDivider />
-                    <MenuItem>Kijelentkezés</MenuItem>
+                  <MenuItem onClick={routeChangeSettings}>Beállítások</MenuItem>
+                  <MenuDivider />
+                  <MenuItem onClick={routeChangeSignout}>
+                    Kijelentkezés
+                  </MenuItem>
                 </MenuGroup>
-                
               </MenuList>
             </Menu>
           </Flex>
@@ -107,19 +139,22 @@ export default function Simple() {
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map(link => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
+              <Button onClick={routeChangeUpload}>
+                <NavLink>Étel feltöltése</NavLink>
+              </Button>
+              <Button onClick={routeChangeUploaded}>
+                <NavLink>Feltöltött ételek</NavLink>
+              </Button>
+              <Button onClick={routeChangeSearch}>
+                <NavLink>Ételek keresése</NavLink>
+              </Button>
+              <Button onClick={routeChangeSpec}>
+                <NavLink>Szükségek specifikálása</NavLink>
+              </Button>
             </Stack>
           </Box>
         ) : null}
       </Box>
-
-      <Box p={4}>
-        <Text fontSize='5xl'>{UserType}</Text>
-        {UserName}-ként vagy bejelentkezve
-    </Box>
-      
     </>
-  )
+  );
 }

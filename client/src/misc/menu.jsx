@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
-import FoodSavers from './foodsaversMain'
-import AboutUs from './about'
-import JoinUs from './join'
+import FoodSavers from '../components/foodSavers'
+import AboutUs from '../components/about'
+import JoinUs from '../components/join'
 
 export default function Menu(){
 

@@ -8,9 +8,11 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
+import MenuNav from "./menuNav";
 
-export default function Etelmentok() {
+export default function FoodSavers() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const handleChangeEmail = (event) => setEmail(event.target.value);
@@ -19,8 +21,16 @@ export default function Etelmentok() {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = "/loggedin";
+    navigate(path);
+  };
+
   return (
     <>
+      <MenuNav></MenuNav>
+      <br />
       <SimpleGrid
         columns={2}
         spacing={10}
@@ -65,9 +75,7 @@ export default function Etelmentok() {
             colorScheme="blue"
             variant="outline"
             margin="20px"
-            onClick={() => {
-              console.log(email + " " + password);
-            }}
+            onClick={routeChange}
           >
             Bejelentkezés
           </Button>

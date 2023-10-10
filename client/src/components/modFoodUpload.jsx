@@ -26,9 +26,6 @@ export default function BtnFoodUpload() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [value, setValue] = React.useState("1");
 
-  value = { email };
-  onChange = { handleChangeEmail };
-
   const [foodtype, setFoodtype] = React.useState("");
   const handleChangeFoodtype = (event) => setFoodtype(event.target.value);
 
