@@ -24,12 +24,11 @@ export class FoodService {
             
             return food;
         } catch (error) {
-            console.log(error)
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
     }
 
-    async get(){
+    async getBySearch(req: any){
         try {
             const foods = await prisma.food.findMany({
                 include: {
@@ -38,10 +37,48 @@ export class FoodService {
                 }
             })
 
+            let array: Array<any> = [];
+        for (let index = 0; index < foods.length; index++) {
+            const element = foods[index];
+            const foodofferers = await prisma.food_offerer.findFirst({
+                where: {
+                    id: element.food_offererId
+                },
+                select: {
+                    latitude: true,
+                    longitude: true
+                }
+            }) 
+            let indexOfFood = foods[index].id
+            let alma = Promise.resolve(this.distanceCalculation(foodofferers.latitude, foodofferers.longitude, req.user.latitude, req.user.longitude))
+            alma.then(value => {
+                array.push({"id": indexOfFood, "distance": value})
+            })
+        }
+        return {array}
+            
+        } catch (error) {
+            throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
+        }
+        
+    }
+
+    async get(req: any){
+        try {
+            const foods = await prisma.food.findMany({
+                include: {
+                    allergens: true,
+                    kitchen_type: true
+                }
+            })
             return foods;
         } catch (error) {
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    calc(req: any, foods: Array<any>){
+        
     }
 
     async update(fm: FoodModel, id: number){
@@ -79,4 +116,26 @@ export class FoodService {
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
     }
+
+    
+    private async distanceCalculation(lat1: number, lng1: number, lat2: number, lng2: number) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = this.deg2rad(lat2-lat1);  // this.deg2rad below
+        var dLon = this.deg2rad(lng2-lng1); 
+        var a = 
+          Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+          Math.sin(dLon/2) * Math.sin(dLon/2)
+          ; 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; // Distance in km
+        return d;
+      }
+      
+      deg2rad(deg) {
+        return deg * (Math.PI/180)
+      }
+
+      
+         
 }

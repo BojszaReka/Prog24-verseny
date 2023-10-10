@@ -43,6 +43,7 @@ export class FoodsaverService {
             const { password, ...rest } = f;
             return rest;
         } catch (error) {
+            console.log(error)
             if (error instanceof IsExistsRegistartionException) {
                 throw new IsExistsRegistartionException();
             }

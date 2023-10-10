@@ -28,7 +28,7 @@ export class AuthService {
                 throw new NoMatchesPasswordAndEmailException();
             }
 
-            const payload = { email: user.email, name: user.name, id: user.id, role: user.roleId };
+            const payload = { email: user.email, name: user.name, id: user.id, role: user.roleId, latitude: user.latitude, longitude: user.longitude };
 
             const res: LoginResponseModel = {
                 name: user.name,
@@ -54,4 +54,5 @@ export class AuthService {
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
     }
+
 }

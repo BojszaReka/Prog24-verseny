@@ -15,6 +15,5 @@ export class FoodModel{
   kitchenId       : number
   @IsNotEmpty()
   food_offererId  : number
-  @IsNotEmpty()
   allergens
 }

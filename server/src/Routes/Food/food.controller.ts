@@ -2,10 +2,11 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { FoodService } from './food.service';
 import { FoodModel } from 'src/Models/Food.model';
-import { flatMap } from 'rxjs';
+import { AuthGuard } from '../Auth/auth.guard';
+import { Role } from 'src/Enums/role.enum';
 
 @Controller('/food')
 export class FoodController {
@@ -17,8 +18,16 @@ export class FoodController {
     }
     
     @Get('/get')
-    async get(){
-        return await this.FoodService.get();
+    @UseGuards(new AuthGuard(Role.FOOD_SAVER))
+    async get(@Req() req){
+        return await this.FoodService.get(req);
+    }
+
+    @Get('/search')
+    @UseGuards(new AuthGuard(Role.FOOD_SAVER))
+    async search(@Req() req)
+    {
+        return await this.FoodService.getBySearch(req)
     }
 
     @Put('/update/:id')
