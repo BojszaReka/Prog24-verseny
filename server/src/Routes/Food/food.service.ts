@@ -90,12 +90,6 @@ export class FoodService {
         
     }
 
-    async CompareAllerges(query: any, foods: Array<any>){
-        for (let index = 0; index < foods.length; index++) {
-            
-        }
-    }
-
     async get(req: any){
         try {
             const foods = await prisma.food.findMany({
@@ -108,10 +102,6 @@ export class FoodService {
         } catch (error) {
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
-    }
-
-    calc(req: any, foods: Array<any>){
-        
     }
 
     async update(fm: FoodModel, id: number){

@@ -4,6 +4,8 @@ import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { IsExistsRegistartionException } from 'src/Exceptions/isexistsregistartion.exception';
 import { IsNotExistsException } from 'src/Exceptions/isnotexists.exception';
+import { CharityCSVModel } from 'src/Models/CharityCSV.model';
+const fs = require("fs");
 
 const prisma: PrismaClient = new PrismaClient();
 
@@ -121,5 +123,82 @@ export class CharityService {
             }
             throw new Error("Adatbázis hiba!");
         }
+    }
+
+    async uploadCSV(file: Express.Multer.File, req: any){
+        let csv = fs.readFileSync(file.path)
+        let csvString = csv.toString();
+        var lines = csvString.split("\n");
+
+        var result = [];
+    
+        var headers = lines[1].split(",");
+    
+        for (var i = 2; i < lines.length-1; i++) {
+    
+            var obj = {};
+            var currentline = lines[i].split(",");
+    
+            for (var j = 0; j < headers.length; j++) {
+                obj[headers[j]] = currentline[j];
+            }
+    
+            result.push(obj);
+    
+        }
+        let element: Array<any> = [];
+        for (let index = 0; index < result.length; index++) {
+             element.push((JSON.stringify(result[index])).split(":")[1]);
+             
+        }
+        let modifiedArray: Array<any> = [];
+        for (let indexT = 0; indexT < element.length; indexT++) {
+             element[indexT] = (element[indexT]).replace(String.fromCharCode(92),"");
+             element[indexT] = (element[indexT]).slice(1,-3);
+        }
+        let AllergyArray: Array<any> = [];
+        for (let indexX = 0; indexX < element.length; indexX++) {
+            const json = element[indexX].split(";")
+            const CharityMember: CharityCSVModel = new CharityCSVModel;
+            AllergyArray = []
+            CharityMember.name = json[0];
+            CharityMember.locality = json[1];
+            CharityMember.birth_date = parseInt(json[2]);
+            json[3] === "1" ? AllergyArray.push(JSON.parse('{ "name": "cukorbeteg1"}')) : null
+            json[3] === "2" ? AllergyArray.push(JSON.parse('{ "name": "cukorbeteg2"}')) : null
+            json[3] === "3" ? AllergyArray.push(JSON.parse('{ "name": "cukorbeteg3"}')) : null
+            json[4] === "X" ? AllergyArray.push(JSON.parse('{ "name": "mogyoró"}')) : null
+            json[5] === "X" ? AllergyArray.push(JSON.parse('{ "name": "hal"}')) : null
+            json[6] === "X" ? AllergyArray.push(JSON.parse('{ "name": "szója"}')) : null
+            json[7] === "X" ? AllergyArray.push(JSON.parse('{ "name": "tojás"}')) : null
+            json[8] === "X" ? AllergyArray.push(JSON.parse('{ "name": "laktóz"}')) : null
+            json[9] === "X" ? AllergyArray.push(JSON.parse('{ "name": "glutén"}')) : null
+            await prisma.member.create({
+                data: {
+                    name: CharityMember.name,
+                    birthyear: CharityMember.birth_date,
+                    locality: CharityMember.locality,
+                    charityId: req.user.id,
+                    allergens: {
+                        createMany: {
+                            data: AllergyArray
+                        }
+                    }
+                }
+            })
+            
+        }
+        let stringArray: Array<any> = [];
+        for (let indexJ = 0; indexJ < element.length; indexJ++) {
+             stringArray.push(element[indexJ]);
+        }
+    
+        //return result; //JavaScript object
+        return {message: "Success"}; 
+        /*return {
+        path: file.path,
+        filename: file.originalname,
+        mimetype: file.mimetype
+      };*/
     }
 }
