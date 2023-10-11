@@ -21,14 +21,6 @@ import { Role } from "./misc/Role.enum";
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
   <ChakraProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<FoodSavers />}></Route>
-        <Route path="/foodsavers" element={<FoodSavers />}></Route>
-        <Route path="/aboutus" element={<AboutUs />}></Route>
-        <Route path="/join" element={<JoinUs />}></Route>
-      </Routes>
-    </Router>
     <BrowserRouter>
       <AuthContextProvider>
         <Routes>
@@ -80,5 +72,5 @@ ReactDOM.createRoot(rootElement).render(
         </Routes>
       </AuthContextProvider>
     </BrowserRouter>
-  </ChakraProvider>
+  </ChakraProvider >
 );
