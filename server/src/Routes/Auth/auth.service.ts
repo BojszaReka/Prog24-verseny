@@ -31,6 +31,7 @@ export class AuthService {
             const payload = { email: user.email, name: user.name, id: user.id, role: user.roleId, latitude: user.latitude, longitude: user.longitude };
 
             const res: LoginResponseModel = {
+                id: user.id,
                 name: user.name,
                 email: user.email,
                 phone: user.phone,

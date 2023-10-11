@@ -10,33 +10,32 @@ import { Role } from 'src/Enums/role.enum';
 
 @Controller('/food')
 export class FoodController {
-    constructor(private readonly FoodService: FoodService){ }
+    constructor(private readonly FoodService: FoodService) { }
 
     @Post('/create')
-    async create(@Body() fm: FoodModel){
+    async create(@Body() fm: FoodModel) {
         return await this.FoodService.create(fm);
     }
-    
+
     @Get('/get')
     @UseGuards(new AuthGuard(Role.FOOD_SAVER))
-    async get(@Req() req){
+    async get(@Req() req) {
         return await this.FoodService.get(req);
     }
 
     @Get('/search')
     @UseGuards(new AuthGuard(Role.FOOD_SAVER))
-    async search(@Req() req)
-    {
+    async search(@Req() req) {
         return await this.FoodService.getBySearch(req)
     }
 
     @Put('/update/:id')
-    async update(@Body() fm: FoodModel, @Param('id') id: string){
-        return await this.FoodService.update(fm,parseInt(id));
+    async update(@Body() fm: FoodModel, @Param('id') id: string) {
+        return await this.FoodService.update(fm, parseInt(id));
     }
 
     @Delete('/delete/:id')
-    async delete(@Param('id') id: string){
+    async delete(@Param('id') id: string) {
         return await this.FoodService.delete(parseInt(id));
     }
 }

@@ -8,6 +8,7 @@ export class LoginModel {
 }
 
 export class LoginResponseModel {
+    id: number
     name: string;
     email: string;
     phone: string;
