@@ -182,7 +182,7 @@ export default function BtnFoodOffererReg() {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Mégse
             </Button>
-            <Button variant="ghost" onClick={}>Regisztrálás</Button>
+            <Button variant="ghost">Regisztrálás</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
