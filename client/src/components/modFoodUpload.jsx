@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -21,10 +21,15 @@ import {
   RadioGroup,
   Divider,
 } from "@chakra-ui/react";
+import axios from "axios";
+import AuthContext from "./AuthContext";
+import moment from 'moment';
 
 export default function BtnFoodUpload() {
+  const { user } = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [value, setValue] = React.useState("1");
+  const [getKitchens, SetGetKitchens] = React.useState();
 
   const [name, setName] = React.useState("");
   const handleChangeName = (event) => setName(event.target.value);
@@ -32,19 +37,66 @@ export default function BtnFoodUpload() {
   const [foodtype, setFoodtype] = React.useState("");
   const handleChangeFoodtype = (event) => setFoodtype(event.target.value);
 
-  //kieg!
-  const [allergens, setAllergens] = React.useState("");
-  const handleChangeAllergens = (event) => setAllergens(event.target.value);
+
+  const [allergens, setAllergens] = React.useState([]);
+  const handleChangeAllergens = (event) => {
+
+    const newAllergane = [...allergens];
+    const index = newAllergane.indexOf(event.target.value);
+    if (index === -1) {
+      newAllergane.push(event.target.value);
+    } else {
+      newAllergane.splice(index, 1);
+    }
+    setAllergens(newAllergane);
+  }
 
   const [expiracy, setExpiracy] = React.useState("");
   const handleChangeExpiracy = (event) => setExpiracy(event.target.value);
 
   //kieg!
-  const [eatenat, setEatenat] = React.useState("");
-  const handleChangeEatenat = (event) => setEatenat(event.target.value);
+  const [eatenat, setEatenat] = React.useState(false);
+  const handleChangeEatenat = (event) => {
+    setEatenat(event.target.value == 1)
+  };
 
   const [kitchentype, setKitchentype] = React.useState("");
   const handleChangeKitchentype = (event) => setKitchentype(event.target.value);
+
+  const btnClick = () => {
+    if (!name || !foodtype || !allergens || !expiracy || !kitchentype) {
+      alert("Mindent töltsön ki!");
+      return;
+    }
+
+    let allerg = allergens.map((a) => {
+      return { name: a }
+    });
+
+    console.log(allerg);
+
+    axios.post(`${import.meta.env.VITE_APP_API_URL}/food/create`, {
+      name: name,
+      type: foodtype,
+      expiration_date: moment(expiracy, moment.ISO_8601),
+      istakeway: eatenat,
+      isavailable: true,
+      food_offererId: user.id,
+      kitchenId: 1,
+      allergens: allerg
+    });
+
+    return;
+  }
+  const kitchens = () => {
+    axios.get(`${import.meta.env.VITE_APP_API_URL}/kitchen/get`).then(e => {
+      SetGetKitchens(e.data)
+    })
+  }
+
+  useEffect(() => {
+    kitchens()
+  })
 
   return (
     <>
@@ -75,7 +127,7 @@ export default function BtnFoodUpload() {
                     placeholder="Az étel neve"
                   />
                 </FormControl>
-<br />
+                <br />
                 <FormControl >
                   <FormLabel color="gray">Étel típusa</FormLabel>
                   <Select
@@ -84,10 +136,10 @@ export default function BtnFoodUpload() {
                     id="foodType"
                     placeholder="Étel típusa"
                   >
-                    <option value="1">Melegítendő</option>
-                    <option value="2">Hideg</option>
-                    <option value="3">Rövid lejáratú tejtermék</option>
-                    <option value="4">Pékárú</option>
+                    <option value="Melegítendő">Melegítendő</option>
+                    <option value="Hideg">Hideg</option>
+                    <option value="Rövid">Rövid lejáratú tejtermék</option>
+                    <option value="Pékárú">Pékárú</option>
                   </Select>
                 </FormControl>
               </Box>
@@ -95,9 +147,15 @@ export default function BtnFoodUpload() {
               <Box>
                 <FormControl>
                   <FormLabel color="gray">Allergének</FormLabel>
-                  <Stack spacing={5} direction="row">
-                    <Checkbox colorScheme="blue">Allergén1</Checkbox>
-                    <Checkbox colorScheme="blue">Allergén2</Checkbox>
+                  <Stack spacing={5} direction="column" >
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="mogyoró">Mogyoró</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="hal">Hal</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="laktóz">Laktóz</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="glutén">Glutén</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="szója">Szója</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="tojás">Tojás</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" value="cukorbetegség 1">Cukorbetegség 1</Checkbox>
+                    <Checkbox onChange={handleChangeAllergens} colorScheme="blue" valsue="cukorbetegség 2">Cukorbetegség 2</Checkbox>
                   </Stack>
                 </FormControl>
               </Box>
@@ -121,8 +179,8 @@ export default function BtnFoodUpload() {
                   <FormLabel color="gray">Fogyasztható</FormLabel>
                   <RadioGroup onChange={setValue} value={value} id="place">
                     <Stack direction="row">
-                      <Radio value="1">Helyben</Radio>
-                      <Radio value="2">Elvitelre</Radio>
+                      <Radio onChange={handleChangeEatenat} value="0">Helyben</Radio>
+                      <Radio onChange={handleChangeEatenat} value="1">Elvitelre</Radio>
                     </Stack>
                   </RadioGroup>
                 </FormControl>
@@ -137,10 +195,11 @@ export default function BtnFoodUpload() {
                     id="kitchenType"
                     placeholder="Konyha jellege"
                   >
-                    <option value="option1">Magyar</option>
-                    <option value="option2">Olasz</option>
-                    <option value="option3">Ázsiai</option>
-                    <option value="option4">Mexikói</option>
+                    {
+                      getKitchens && getKitchens.map(e => {
+                        return (<option key={e.id} value={e.id}>{e.name}</option>)
+                      })
+                    }
                   </Select>
                 </FormControl>
               </Box>
@@ -151,10 +210,10 @@ export default function BtnFoodUpload() {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Mégse
             </Button>
-            <Button variant="ghost">Mentés</Button>
+            <Button variant="ghost" onClick={btnClick}>Mentés</Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal >
     </>
   );
 }

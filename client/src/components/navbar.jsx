@@ -19,6 +19,9 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { useContext } from "react";
+import AuthContext from "./AuthContext";
+import { Role } from "../misc/Role.enum";
 
 const NavLink = (props) => {
   const { children } = props;
@@ -41,7 +44,9 @@ const NavLink = (props) => {
 };
 
 export default function Simple() {
-  const UserName = "Felhasználó neve";
+  const { user, logout } = useContext(AuthContext);
+
+  const UserName = user.name;
   const UserType = "Ételfelajánló";
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -72,8 +77,7 @@ export default function Simple() {
   };
 
   const routeChangeSignout = () => {
-    let path = "/";
-    navigate(path);
+    logout();
   };
 
   return (
@@ -98,9 +102,12 @@ export default function Simple() {
               spacing={5}
               display={{ base: "none", md: "flex" }}
             >
-              <Button onClick={routeChangeUpload}>
-                <NavLink>Étel feltöltése</NavLink>
-              </Button>
+              {
+                user.roleId == Role.FOOD_OFFERER &&
+                <Button Button onClick={routeChangeUpload}>
+                  <NavLink>Étel feltöltése</NavLink>
+                </Button>
+              }
               <Button onClick={routeChangeUploaded}>
                 <NavLink>Feltöltött ételek</NavLink>
               </Button>
@@ -154,7 +161,7 @@ export default function Simple() {
             </Stack>
           </Box>
         ) : null}
-      </Box>
+      </Box >
     </>
   );
 }
