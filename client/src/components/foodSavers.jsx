@@ -33,16 +33,16 @@ export default function FoodSavers() {
     <>
       <MenuNav></MenuNav>
       <br />
-      <Box width={"100%"} height={"100%"} mb={40} >
+      <Box width={"100%"} height={"100%"} mb={35} >
         <Center>
           <HStack
             columns={2}
             spacing={10}
           >
-            <Box maxW="32rem" fontFamily="Georgia" px={38}>
+            <Box maxW="32rem" fontFamily="Georgia" px={30}>
               <Heading mb={4}>Ételmetők</Heading>
               <Text fontSize="m">
-                A környzettudatosság és körforgásos gazdasági szemlélet jegyében
+                Az ételpazarlás csökkentése érdekében
               </Text>
             </Box>
             <Box px={27} width={"80%"} mt={39}>

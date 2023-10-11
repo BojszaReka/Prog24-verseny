@@ -21,6 +21,7 @@ export default function AboutUs() {
         spacing={10}
         minChildWidth="400px"
         spacingY="20px"
+        px={30}
       >
         <Box maxW="32rem" fontFamily="Georgia">
           <Image
@@ -28,9 +29,10 @@ export default function AboutUs() {
             alt=""
           />
         </Box>
-        <Box maxW="32rem" fontFamily="Georgia">
+        <Box maxW="32rem" fontFamily="Georgia" mb={20}>
           <Heading mb={4}>Az ételmentők feladata</Heading>
-          <Text fontSize="m">bla bla bla</Text>
+          <Text fontSize="m">Az ételmentők küldetése, hogy egy platformon összehozza a vállalkozásokat és éttermeket azokkal, akiknek szükségük van ételre. Célunk az élelmiszerpazarlás csökkentése
+          , miközben támogatjuk a segélyszervezeteket és a rászorulókat. Csatlakozz hozzánk és légy részese a változásnak!</Text>
         </Box>
       </SimpleGrid>
     </>
