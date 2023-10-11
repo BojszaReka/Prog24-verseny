@@ -16,7 +16,7 @@ export class FoodSaverModel {
     birthyear: number
     @IsNotEmpty()
     @IsNumber()
-    kitchenId: number
+    roleId: number
     @IsNotEmpty()
     latitude: number
     @IsNotEmpty()

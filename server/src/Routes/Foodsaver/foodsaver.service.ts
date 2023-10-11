@@ -37,14 +37,13 @@ export class FoodsaverService {
                     password: hashedPassword,
                     birthyear: fs.birthyear,
                     roleId: 3,
-                    kitchenId: fs.kitchenId,
-                    allergens: fs.allergens
+                    allergens: fs.allergens,
+                    kitchenId: 1
                 }
             });
             const { password, ...rest } = f;
             return rest;
         } catch (error) {
-            console.log(error)
             if (error instanceof IsExistsRegistartionException) {
                 throw new IsExistsRegistartionException();
             }

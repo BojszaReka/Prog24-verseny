@@ -21,8 +21,12 @@ import {
 } from "@chakra-ui/react";
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { PhoneIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function BtnCharityReg() {
+  const navigate = useNavigate();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [show, setShow] = React.useState(false);
@@ -54,6 +58,49 @@ export default function BtnCharityReg() {
 
   const [address, setAddress] = React.useState("");
   const handleChangeAddress = (event) => setAddress(event.target.value);
+
+  const sendRegistration = () => {
+    const data = {
+      email: email,
+      name: name,
+      locality: city,
+      phone: phonenumber,
+      zipcode: parseInt(zipcode),
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
+      password: password,
+      roleId: 1,
+    };
+    axios
+      .post(`http://localhost:8080/charity/create`, data)
+      .then(function (response) {
+        navigate('/')
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+
+  const sendRequest = async () => {
+    await axios
+      .post(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${
+          address.split(" ")[2]
+        }%20${address.split(" ")[0]}%20${
+          address.split(" ")[1]
+        }%20${city}%20ON&key=AIzaSyC3KGXEiZLRsUKSyIYho8duz62jjY2LZOs`
+      )
+      .then(function (response) {
+        setLongitude(response.data.results[0].geometry.location.lat);
+        setLatitude(response.data.results[0].geometry.location.lng);
+        sendRegistration();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -182,7 +229,7 @@ export default function BtnCharityReg() {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Mégse
             </Button>
-            <Button variant="ghost">Regisztrálás</Button>
+            <Button variant="ghost" onClick={sendRequest}>Regisztrálás</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
