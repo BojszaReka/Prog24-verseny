@@ -8,14 +8,14 @@ import {
   InputGroup,
   InputRightElement,
   Center,
-  HStack
+  HStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import MenuNav from "./menuNav";
-import Cookies from 'universal-cookie'
+import Cookies from "universal-cookie";
 const cookies = new Cookies();
-import AuthContext from './AuthContext';
+import AuthContext from "./AuthContext";
 
 export default function FoodSavers() {
   const [email, setEmail] = React.useState("");
@@ -39,33 +39,24 @@ export default function FoodSavers() {
       return;
     }
 
-    login({ email: email, password: password })
-      .catch((e) => {
-        console.log(e);
-      })
-
-
-  }
+    login({ email: email, password: password }).catch((e) => {
+      console.log(e);
+    });
+  };
 
   return (
     <>
       <MenuNav></MenuNav>
       <br />
-      <Box width={"100%"} height={"100%"} mb={35} >
+      <Box width={"100%"} height={"100%"} mb={35}>
         <Center>
-          <HStack
-            columns={2}
-
-            spacing={10}
-          >
+          <HStack columns={2} spacing={10}>
             <Box maxW="32rem" fontFamily="Georgia" px={30}>
               <Heading mb={4}>Ételmetők</Heading>
-              <Text fontSize="m">
-                Az ételpazarlás csökkentése érdekében
-              </Text>
+              <Text fontSize="m">Az ételpazarlás csökkentése érdekében</Text>
             </Box>
             <Box px={27} width={"80%"} mt={39}>
-              <FormControl >
+              <FormControl>
                 <FormLabel>E-mail cím</FormLabel>
                 <Input
                   value={email}
@@ -84,7 +75,8 @@ export default function FoodSavers() {
               <Box maxW="32rem" fontFamily="Georgia">
                 <Heading mb={4}>Ételmetők</Heading>
                 <Text fontSize="m">
-                  A környzettudatosság és körforgásos gazdasági szemlélet jegyében
+                  A környzettudatosság és körforgásos gazdasági szemlélet
+                  jegyében
                 </Text>
               </Box>
               <Box>
@@ -120,12 +112,14 @@ export default function FoodSavers() {
                   variant="outline"
                   margin="20px"
                   onClick={loginBtn}
-                >Bejelentkezés</Button>
+                >
+                  Bejelentkezés
+                </Button>
               </Box>
             </SimpleGrid>
           </HStack>
-        </Center >
-      </Box >
+        </Center>
+      </Box>
     </>
   );
 }
