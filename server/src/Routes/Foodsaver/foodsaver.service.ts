@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { FoodSaverModel, UpdateFoodSaverModel } from 'src/Models/FoodSaver.model';
 import { IsNotExistsException } from 'src/Exceptions/isnotexists.exception';
 
+
 const prisma = new PrismaClient();
 
 
@@ -130,5 +131,6 @@ export class FoodsaverService {
             throw new HttpException("Adatbázis hiba!", HttpStatus.BAD_REQUEST);
         }
     }
+
 }
 

@@ -30,7 +30,6 @@ model Kitchen {
   name      String      @db.VarChar(50)
   Food      Food[]
   Foodsaver Foodsaver[]
-  Member    Member[]
 
   @@map("kitchens")
 }
@@ -87,14 +86,11 @@ model Charity {
 model Member {
   id           Int        @id @default(autoincrement())
   name         String     @db.VarChar(100)
-  phone        String     @db.VarChar(12)
   locality     String     @db.VarChar(100)
   birthyear    Int
-  kitchenId    Int
   charityId    Int?
   allergens    Allergen[]
   Charity      Charity?   @relation(fields: [charityId], references: [id])
-  kitchen_type Kitchen    @relation(fields: [kitchenId], references: [id])
 
   @@map("members")
 }
