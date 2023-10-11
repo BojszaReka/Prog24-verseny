@@ -188,17 +188,7 @@ export class CharityService {
             })
             
         }
-        let stringArray: Array<any> = [];
-        for (let indexJ = 0; indexJ < element.length; indexJ++) {
-             stringArray.push(element[indexJ]);
-        }
     
-        //return result; //JavaScript object
         return {message: "Success"}; 
-        /*return {
-        path: file.path,
-        filename: file.originalname,
-        mimetype: file.mimetype
-      };*/
     }
 }

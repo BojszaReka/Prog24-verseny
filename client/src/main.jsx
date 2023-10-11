@@ -12,10 +12,10 @@ import Settings from "./components/settings";
 import JoinUs from "./components/join";
 import AboutUs from "./components/about";
 import FoodSavers from "./components/foodSavers";
+import Map from "./components/map";
 
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
-  <React.StrictMode>
     <ChakraProvider>
       <Router>
         <Routes>
@@ -29,8 +29,8 @@ ReactDOM.createRoot(rootElement).render(
           <Route path="/loggedin/search" element={<FoodSearch />}></Route>
           <Route path="/loggedin/spec" element={<NeedsSpec />}></Route>
           <Route path="/loggedin/settings" element={<Settings />}></Route>
+          <Route path="/loggedin/map" element={<Map />}></Route>
         </Routes>
       </Router>
     </ChakraProvider>
-  </React.StrictMode>
 );
